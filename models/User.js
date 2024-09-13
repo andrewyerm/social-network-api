@@ -5,38 +5,38 @@ const userSchema = new Schema(
     username: {
       type: String,
       unique: true,
-      required: true,
-      trim: true
+      required: [true, 'Username is required'],
+      trim: true,
     },
     email: {
       type: String,
-      required: true,
       unique: true,
-      match: [/.+@.+\..+/, 'Must match a valid email address!']
+      required: [true, 'Email is required'],
+      match: [/.+@.+\..+/, 'Must match a valid email address!'],
     },
     thoughts: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Thought' // Added the missing closing quote
-      }
+        ref: 'Thought',
+      },
     ],
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    ]
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: {
       virtuals: true,
+      getters: true,
     },
     id: false,
   }
 );
 
-// Create a virtual property 'friendCount' that gets the amount of friends a user has
-userSchema.virtual('friendCount').get(function() {
+userSchema.virtual('friendCount').get(function () {
   return this.friends.length;
 });
 
